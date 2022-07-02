@@ -5,10 +5,23 @@ metadata:
 spec:
   selector:
     app: rails
-  type: LoadBalancer
+  type: NodePort
   ports:
-    - port: 80
-      protocol: HTTP
+    - port: 8080
+      protocol: TCP
       targetPort: 3000
   # loadBalancerSourceRanges:
   #   - ""
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: basic-ingress
+spec:
+  defaultBackend:
+    service:
+      name: hello-service
+      port:
+        number: 8080

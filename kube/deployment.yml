@@ -19,6 +19,29 @@ spec:
           # image: your image
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - name: rails-log
+              mountPath: /home/ruby/log
+            - name: tmp
+              mountPath: /home/ruby/tmp
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            runAsUser: 30000
+            runAsGroup: 30000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - all
+              add:
+                - NET_BIND_SERVICE
+            seccompProfile:
+              type: RuntimeDefault
+      volumes:
+        - name: rails-log
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
 
 ---
 
@@ -32,5 +55,5 @@ spec:
     kind: Deployment
     name: hello-app
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 50
