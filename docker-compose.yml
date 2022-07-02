@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  rails:
+    build:
+      context: .
+      args:
+        UID: 1000
+        GID: 1000
+        USER: developper
+        GROUP: developper
+    volumes:
+      - type: bind
+        source: .
+        target: /home/developper

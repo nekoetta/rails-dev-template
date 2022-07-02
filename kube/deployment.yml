@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-app
+  labels:
+    app: hello-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rails
+  template:
+    metadata:
+      labels:
+        app: rails
+    spec:
+      containers:
+        - name: rails
+          # image: your image
+          ports:
+            - containerPort: 3000
+
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hello-autoscale
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hello-app
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 50
